@@ -1,0 +1,72 @@
+<html>
+<head>
+<link rel="stylesheet" type="text/css" href="js/jelo-ui.css" />
+<script type='text/javascript' src='js/jelo.js'></script>
+<script type='text/javascript' src='js/jelo-ui.js'></script>
+
+<script>
+  var JBE_PROJ = [];    
+</script>
+
+</head>
+
+<body>
+
+<div>
+  Count Projects: <span id="ctr_proj"></span>
+  <input type="button" id="btnID" value="ALL" onclick="getID(0)"/>
+</div>  
+<br>
+<div>Select Project: 
+  <input type="text" id="txID" value=0 />
+  <input type="button" id="btnID" value="GO" onclick="getID(txID.value)"/>
+</div>  
+<br>
+<div style="width:500px;">
+  <span style="float:left;width:10%;">No.</span>
+  <span style="float:left;width:30%;">Username</span>
+  <span style="float:left;width:30%;">Name</span>
+  <span style="float:left;width:30%;">Email</span>
+</div>
+
+<div id="divDisp"></div>
+
+<script>
+  
+  function getID(v){
+    //alert(v);
+    var xmlhttp = new XMLHttpRequest();
+    xmlhttp.onreadystatechange = function() {
+      if (this.readyState == 4 && this.status == 200) {						
+        var arr = this.responseText;
+        if(arr=='') {            
+          JBE_PROJ=[];
+        }else{          
+          JBE_PROJ = JSON.parse(arr);
+        }
+        //alert(arr);
+        dispRec();
+      }
+    };
+    xmlhttp.open("GET", "getID.php?rec="+v, true);
+    xmlhttp.send();
+  }
+
+  function dispRec(){
+    var projects=JBE_PROJ;
+    dtl='';
+    for(i=0;i<projects.length;i++){
+      dtl=dtl+
+        '<div style="width:500px;">'+
+        ' <span style="float:left;width:10%;text-align:left;background:none;">'+projects[i]['id']+'</span>'+      
+        ' <span style="float:left;width:30%;text-align:left;">'+projects[i]['username']+'</span>'+              
+        ' <span style="float:left;width:30%;text-align:left;">'+projects[i]['name']+'</span>'+
+        ' <span style="float:left;width:30%;text-align:left;">'+projects[i]['email']+'</span>'+
+        '<div>';
+    }
+    document.getElementById('divDisp').innerHTML=dtl;
+  }
+  
+</script>
+</body>
+</html>
